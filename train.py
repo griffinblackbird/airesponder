@@ -65,6 +65,6 @@ def codebaseTrain():
 
     knowledge.add_contents([{"path": "test.py"}])
 
-codebaseTrain()
+# codebaseTrain()
 # Uncomment to run manually
 # retrainBugReportKB()
