@@ -13,6 +13,5 @@ dependencies = [
     "groq>=0.33.0",
     "openai>=2.7.1",
     "pandas>=2.3.3",
-    "prefect>=3.5.0",
     "sqlalchemy>=2.0.44",
 ]
