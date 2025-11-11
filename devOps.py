@@ -40,7 +40,7 @@ yaml_writer = Agent(
         "Create the file at: .github/workflows/ci-cd.yml",
         "For Python projects, use 'uv' as the package manager for faster dependency installation.",
         "Structure the workflow with these jobs:",
-        "  1. 'test' job: Install dependencies with uv, run linting (ruff/flake8), run tests with coverage",
+        "  1. 'test' job: Install dependencies with uv, run tests with coverage",
         "  2. 'build' job: Build Docker image only if tests pass",
         "  3. 'push' job: Push to GitHub Container Registry (ghcr.io) only on main branch",
         "Use workflow triggers: on push to main branch and on pull requests.",
