@@ -1,0 +1,23 @@
+service_number,timestamp,customer_name,customer_email,bug_description,os_info,similarity_check_result,severity_score
+SR-20251110-6F756694,2025-11-10 00:44:20,Arreyan Hamid,arreyanhamid@icloud.com,The user is not able to add 2 numbers,Linux,Completed,high
+SR-20251110-EEF3B180,2025-11-10 00:45:02,Muskan,muskan@gmail.com,the user is not able to add 2 numbers,linux,Completed,
+SR-20251110-BA3EB29E,2025-11-10 00:45:58,Muskan,muskan@gmail.com,The user is not able to add 2 numbers,linuz,Completed,
+SR-20251110-7A671C3D,2025-11-10 00:53:59,haha,haha@me.ciom,the UI throws a 404 error,linux,Completed,
+SR-20251110-24957747,2025-11-10 04:14:34,me,measd,my name is jone,linux,Completed,
+SR-20251110-79C0AFEE,2025-11-10 04:16:25,sdc,sxc,sdcsd,dsafsf,Completed,
+SR-20251110-B63436B4,2025-11-10 04:19:44,sdfsadf,fsadfasd,sdfsfsf,dsfadf,Completed,
+SR-20251110-B228D532,2025-11-10 04:21:51,sdfdf,sdfsd,fsdfsdf,sdfadf,Completed,test_high
+SR-20251110-741718B1,2025-11-10 04:23:20,sdsd,sdafads,sdfsdfsdf,sdaff,Completed,test_high
+SR-20251110-14E70244,2025-11-10 04:24:24,asdfsf,sdafdsf,sdfsdafdsf,sdafasdf,Completed,
+SR-20251110-8D12C21B,2025-11-10 04:25:48,vdsfvdfv,vsdfvdfsv,svfdsv,fdvsdfv,Completed,
+SR-20251110-ADC02D3E,2025-11-10 04:26:43,n jnlnkj,jknbhbn,jnbljbnl,jkbbj,Completed,
+SR-20251110-2FD034A0,2025-11-10 04:27:39,asfdfaadsf,xzcvdsv,sdvcsdfv,sdvsfdv,Completed,FUNCTION_TEST
+SR-20251110-4D0648A7,2025-11-10 04:29:22,csad,sadcd,sdafdsf,dscv,Completed,
+SR-20251110-033852AB,2025-11-10 04:30:36,sdfdsaf,fsadfsdfsdf,sdafdsfasdf,sadfsdfa,Pending,low
+SR-20251110-4DBA7A0B,2025-11-10 04:31:17,aksdnkajsd,adsdsad,dasdsaf,sadfsdfa,Pending,low
+SR-20251110-EE6D6783,2025-11-10 04:32:43,asdf,asdfg,asdfgh,sdfv,Completed,
+SR-20251110-ED9335A1,2025-11-10 04:33:39,asdds,dasdsada,sdaq213,q23easd,Pending,low
+SR-20251110-23EC2F58,2025-11-10 04:35:24,Test User,test@example.com,The UI throws a 404 error when clicking submit,Linux,Completed,high
+SR-20251111-087F3555,2025-11-11 22:01:43,Arreyan Hamid,a@gmail.com,The UI is not able to work properly,Linux,Completed,high
+SR-20251111-879349CF,2025-11-11 22:04:37,fdsf,sfzdzsf@zds.com,vzsdfdsf,sfsdfs,Completed,error
+SR-20251111-2B38ABB3,2025-11-11 22:07:02,jksbdhafhg,sdfjhbgkhjdfsg,sdkjhgfdhg,isjhg,Completed,low
