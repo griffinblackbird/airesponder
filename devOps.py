@@ -22,7 +22,7 @@ cicd_agent = Agent(
         "  - Triggers on push to main branch",
         "  - Checks out the code",
         "  - Sets up the appropriate language runtime",
-        "  - Installs dependencies (use uv for Python projects - pip install uv followed by uv venv followed by uv add -r requirements.txt)",
+        "  - Installs dependencies",
         "  - Builds a Docker image, the image name should be LOWERCASE",
         "  - Pushes the image to GitHub Container Registry (ghcr.io)",
         "Use proper caching for faster builds.",
