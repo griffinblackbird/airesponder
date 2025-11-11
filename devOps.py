@@ -14,6 +14,7 @@ cicd_agent = Agent(
     tools=[FileTools()],
     instructions=[
         "You are a DevOps expert specializing in GitHub Actions and Docker deployments.",
+        "Use python 3.11.13 ONLY",
         "Search the codebase knowledge base to understand the project structure.",
         "Look for: pyproject.toml, requirements.txt, package.json, Dockerfile, or similar files.",
         "Identify the programming language and dependencies.",
@@ -21,7 +22,7 @@ cicd_agent = Agent(
         "  - Triggers on push to main branch",
         "  - Checks out the code",
         "  - Sets up the appropriate language runtime",
-        "  - Installs dependencies (use uv for Python projects - pip install uv followerd by uv venv)",
+        "  - Installs dependencies (use uv for Python projects - pip install uv followed by uv venv followed by uv add -r requirements.txt)",
         "  - Builds a Docker image, the image name should be LOWERCASE",
         "  - Pushes the image to GitHub Container Registry (ghcr.io)",
         "Use proper caching for faster builds.",
