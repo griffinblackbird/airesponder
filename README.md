@@ -5,11 +5,13 @@ This project uses Apache Airflow to automatically retrain the bug report knowled
 ## Setup and Run
 
 1. **Start the services:**
+
    ```bash
    docker-compose up -d
    ```
 
 2. **Access Airflow UI:**
+
    - URL: http://localhost:8080
    - Username: `admin`
    - Password: `admin`
@@ -39,3 +41,5 @@ docker-compose logs -f airflow-scheduler
 - **DAG**: Located in `dags/bug_retrain_dag.py`
 
 The DAG calls `retrainBugReportKB()` from `train.py` every 2 minutes.
+
+yesyeys
