@@ -13,5 +13,6 @@ dependencies = [
     "openai>=2.7.1",
     "pandas>=2.3.3",
     "pytest>=9.0.0",
+    "python-dotenv>=1.2.1",
     "sqlalchemy>=2.0.44",
 ]

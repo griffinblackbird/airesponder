@@ -52,7 +52,6 @@ google-genai==1.49.0
 googleapis-common-protos==1.72.0
 greenback==1.2.1
 greenlet==3.2.4
-groq==0.33.0
 grpcio==1.76.0
 h11==0.16.0
 hf-xet==1.2.0
@@ -64,6 +63,7 @@ humanfriendly==10.0
 idna==3.11
 importlib-metadata==8.7.0
 importlib-resources==6.5.2
+iniconfig==2.3.0
 itsdangerous==2.2.0
 jinja2==3.1.6
 jiter==0.11.1
@@ -119,6 +119,7 @@ pygtrie==2.5.0
 pyjwt==2.10.1
 pypika==0.48.9
 pyproject-hooks==1.2.0
+pytest==9.0.0
 python-daemon==3.1.2
 python-dateutil==2.9.0.post0
 python-dotenv==1.2.1

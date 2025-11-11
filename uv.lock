@@ -84,6 +84,7 @@ dependencies = [
     { name = "openai" },
     { name = "pandas" },
     { name = "pytest" },
+    { name = "python-dotenv" },
     { name = "sqlalchemy" },
 ]
 
@@ -97,6 +98,7 @@ requires-dist = [
     { name = "openai", specifier = ">=2.7.1" },
     { name = "pandas", specifier = ">=2.3.3" },
     { name = "pytest", specifier = ">=9.0.0" },
+    { name = "python-dotenv", specifier = ">=1.2.1" },
     { name = "sqlalchemy", specifier = ">=2.0.44" },
 ]
 
