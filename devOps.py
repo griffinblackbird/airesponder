@@ -16,9 +16,8 @@ def githubAgent(codeChanges):
         tools=[ShellTools()],
         instructions=[
             "You analyze git changes and create meaningful commit messages",
-            "Run 'git diff' to see changes before committing",
             "Use 'git add .' to stage all changes",
-            "Create descriptive commit messages based on the changes",
+            "Create descriptive commit messages based on the code changes",
             "Run 'git commit -m \"message\"' with the generated message",
             "Finally run 'git push' to push changes"
         ],
