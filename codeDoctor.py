@@ -25,7 +25,7 @@ bug_analyzer = Agent(
 # Agent 2: Code Fixer - writes and saves the fix
 code_fixer = Agent(
     name="Code Fixer",
-    model=Gemini(id="gemini-2.0-flash", api_key="AIzaSyDLMFmE0yQM_9an5LHX-J3AQw3mpgPb0To"),
+    model=Gemini(id="gemini-2.5-pro", api_key="AIzaSyDLMFmE0yQM_9an5LHX-J3AQw3mpgPb0To"),
     tools=[FileTools()],
     instructions=[
         "Based on the bug analysis, write the code fix",
@@ -38,7 +38,7 @@ code_fixer = Agent(
 # Agent 3: Syntax Checker - validates syntax
 syntax_checker = Agent(
     name="Syntax Checker",
-    model=Gemini(id="gemini-2.0-flash", api_key="AIzaSyDLMFmE0yQM_9an5LHX-J3AQw3mpgPb0To"),
+    model=Gemini(id="gemini-2.5-pro", api_key="AIzaSyDLMFmE0yQM_9an5LHX-J3AQw3mpgPb0To"),
     tools=[FileTools()],
     instructions=[
         "Read and check the syntax of the updated code",
@@ -50,7 +50,7 @@ syntax_checker = Agent(
 # Create the bug-fixing team
 bug_fix_team = Team(
     name="Bug Fix Team",
-    model=Gemini(id="gemini-2.0-flash", api_key="AIzaSyDLMFmE0yQM_9an5LHX-J3AQw3mpgPb0To"),
+    model=Gemini(id="gemini-2.5-pro", api_key="AIzaSyDLMFmE0yQM_9an5LHX-J3AQw3mpgPb0To"),
     members=[bug_analyzer, code_fixer, syntax_checker],
     instructions=[
         "First, Bug Analyzer must search the knowledge base to find the bug location",
