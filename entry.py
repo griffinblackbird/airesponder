@@ -1,8 +1,13 @@
 import pandas as pd
 import os
 from datetime import datetime
-from main import similaritySearch, ensureSeverityColumn, updateSeverityScore
+from main import similaritySearchAgent
+from codeDoctor import fix_bug
+from devOps import githubAgent
 import uuid
+import sys
+from io import StringIO
+import contextlib
 
 class BugReportEntry:
     def __init__(self, csv_file="bug_reports.csv"):
@@ -17,18 +22,18 @@ class BugReportEntry:
                 'customer_name',
                 'customer_email',
                 'bug_description',
-                'os_info',
-                'similarity_check_result',
-                'severity_score'
+                'device_info',
+                'priority'
             ])
             df.to_csv(self.csv_file, index=False)
             print(f"Created new bug reports database: {self.csv_file}")
         else:
-            # Ensure severity_score column exists in existing CSV
-            ensureSeverityColumn()
-            # Replace 'nan' strings with actual NaN values for consistency
-            df = pd.read_csv(self.csv_file, na_values=['nan'])
-            df.to_csv(self.csv_file, index=False)
+            # Ensure priority column exists in existing CSV
+            df = pd.read_csv(self.csv_file)
+            if 'priority' not in df.columns:
+                df['priority'] = ''
+                df.to_csv(self.csv_file, index=False)
+                print("Added priority column to existing bug_reports.csv")
 
     def generate_service_number(self):
         date_str = datetime.now().strftime("%Y%m%d")
@@ -46,88 +51,136 @@ class BugReportEntry:
             'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             'customer_name': input("Customer Name: ").strip(),
             'customer_email': input("Customer Email: ").strip(),
-            'bug_description': input("Bug Description (in natural language): ").strip(),
-            'os_info': input("OS/Environment (e.g., Windows 11, macOS Sonoma): ").strip(),
-            'similarity_check_result': 'Pending',
-            'severity_score': None  # Use None instead of empty string
+            'bug_description': input("Bug Description: ").strip(),
+            'device_info': input("Device/OS: ").strip(),
+            'priority': ''  # Will be filled after AI analysis
         }
 
         df = pd.read_csv(self.csv_file)
         new_row = pd.DataFrame([bug_data])
         df = pd.concat([df, new_row], ignore_index=True)
-        df.to_csv(self.csv_file, index=False)
 
         print(f"\nBug report filed successfully!")
         print(f"Service Number: {service_number}")
 
+        # Run similarity search on the bug description
+        print("\nRunning AI similarity analysis...")
+        search_query = f"Bug: {bug_data['bug_description']} on {bug_data['device_info']}"
+        similarity_result = similaritySearchAgent(search_query)
+
+        print("\nAI Analysis Results:")
+        for key, value in similarity_result.items():
+            print(f"{key}: {value}")
+
+        # Extract priority from the AI response format
+        priority = ''
+        similarity_status = ''
+
+        # Parse the AI response to extract priority and similarity status
+        ai_response_text = str(similarity_result)
+
+        # Extract priority
+        if 'priority:' in ai_response_text.lower():
+            parts = ai_response_text.lower().split('priority:')
+            if len(parts) > 1:
+                priority_part = parts[1].split(',')[0].strip()
+                # Remove any trailing characters like ', ', ', ', or '}'
+                priority = priority_part.rstrip("',} ").strip()
+                # Take only the first word to ensure clean priority value
+                priority = priority.split()[0] if priority else ''
+
+        # Extract similarity status
+        if 'similarity_status:' in ai_response_text.lower():
+            parts = ai_response_text.lower().split('similarity_status:')
+            if len(parts) > 1:
+                similarity_part = parts[1].split(',')[0].strip()
+                similarity_status = similarity_part
+
+        # Update the priority column in the DataFrame
+        if priority:
+            df.loc[df['service_number'] == service_number, 'priority'] = priority
+            print(f"\nPriority '{priority}' extracted and assigned to bug report.")
+
+        # Display similarity status if available
+        if similarity_status:
+            print(f"Similarity Status: {similarity_status}")
+
+        # Save the complete data (including priority) to CSV first
+        df.to_csv(self.csv_file, index=False)
+        print(f"\nBug report with priority saved to CSV.")
+
+        # Handle priority-based actions AFTER saving to CSV
+        if priority:
+            priority_lower = priority.lower()
+            if priority_lower == 'high':
+                print("\nHIGH PRIORITY DETECTED: This bug has been staged for human review.")
+                print("A developer will be assigned to review this issue manually.")
+
+                # Optional: Allow Code Doctor for high priority with warning
+                run_code_doctor = input("WARNING: High priority bugs may require careful manual review. Do you still want to run Code Doctor? (y/n): ").strip().lower()
+
+                if run_code_doctor == 'y':
+                    print(f"\nRunning Code Doctor for HIGH PRIORITY bug: {bug_data['bug_description']}")
+                    print("=" * 50)
+                    print("⚠️  WARNING: Automated fixes for high priority bugs should be carefully reviewed!")
+                    try:
+                        # Capture Code Doctor output
+                        f = StringIO()
+                        with contextlib.redirect_stdout(f):
+                            fix_bug(bug_data['bug_description'])
+                        code_doctor_output = f.getvalue()
+                        print(code_doctor_output)
+                        print("=" * 50)
+                        print("Code Doctor analysis completed for HIGH PRIORITY bug.")
+
+                        # Run GitHub Agent with Code Doctor output
+                        print("\nPushing code changes to GitHub...")
+                        print("=" * 50)
+                        githubAgent(code_doctor_output)
+                        print("=" * 50)
+                        print("Code changes pushed to GitHub successfully!")
+                        print("⚠️  IMPORTANT: Please manually review the automated changes pushed to GitHub!")
+
+                    except Exception as e:
+                        print(f"Error during automated fix or GitHub push: {str(e)}")
+                else:
+                    print("High priority bug will be handled by human review only.")
+            elif priority_lower in ['medium', 'low']:
+                print(f"\n{priority_lower.upper()} PRIORITY DETECTED")
+                # Ask user if they want to run Code Doctor
+                run_code_doctor = input(f"Do you want to run Code Doctor to attempt fixing this {priority_lower} priority bug? (y/n): ").strip().lower()
+
+                if run_code_doctor == 'y':
+                    print(f"\nRunning Code Doctor for bug: {bug_data['bug_description']}")
+                    print("=" * 50)
+                    try:
+                        # Capture Code Doctor output
+                        f = StringIO()
+                        with contextlib.redirect_stdout(f):
+                            fix_bug(bug_data['bug_description'])
+                        code_doctor_output = f.getvalue()
+                        print("=" * 50)
+                        print(f"Code Doctor analysis completed for {priority_lower} priority bug.")
+
+                        # Run GitHub Agent with Code Doctor output
+                        print("\nPushing code changes to GitHub...")
+                        print("=" * 50)
+                        githubAgent(code_doctor_output)
+                        print("=" * 50)
+                        print("Code changes pushed to GitHub successfully!")
+
+                    except Exception as e:
+                        print(f"Error during automated fix or GitHub push: {str(e)}")
+                else:
+                    print("Code Doctor skipped. Bug will be handled manually if needed.")
+
         return service_number
 
-    def run_similarity_search(self, service_number):
-        try:
-            # Read CSV once
-            df = pd.read_csv(self.csv_file, na_values=['nan', 'NaN', ''])
-            print(f"📊 Loaded CSV with {len(df)} rows")
-
-            bug_row = df[df['service_number'] == service_number]
-            if bug_row.empty:
-                print(f"❌ Bug report {service_number} not found!")
-                return
-
-            bug_row = bug_row.iloc[0]
-            print(f"\nRunning similarity search for Service Number: {service_number}")
-
-            # Check current values before search
-            current_severity = df.loc[df['service_number'] == service_number, 'severity_score'].iloc[0]
-            current_status = df.loc[df['service_number'] == service_number, 'similarity_check_result'].iloc[0]
-            print(f"📊 Current severity_score: '{current_severity}' (type: {type(current_severity)})")
-            print(f"📊 Current similarity_check_result: '{current_status}'")
-
-            search_query = f"Bug: {bug_row['bug_description']} on {bug_row['os_info']}"
-            print(f"🔍 Search query: {search_query}")
-
-            print("\nAI Similarity Search Results:")
-            priority = similaritySearch(search_query)
-            print(f"🎯 AI returned priority: {priority}")
-
-            # Update both columns in a single operation
-            df.loc[df['service_number'] == service_number, ['severity_score', 'similarity_check_result']] = [priority, 'Completed']
-            df.to_csv(self.csv_file, index=False)
-            print("✅ Both columns updated successfully")
-
-            # Verify the updates
-            df_final = pd.read_csv(self.csv_file, na_values=['nan', 'NaN', ''])
-            final_severity = df_final.loc[df_final['service_number'] == service_number, 'severity_score'].iloc[0]
-            final_status = df_final.loc[df_final['service_number'] == service_number, 'similarity_check_result'].iloc[0]
-            print(f"📋 Final severity_score: '{final_severity}'")
-            print(f"📋 Final similarity_check_result: '{final_status}'")
-
-            if pd.isna(current_severity) and not pd.isna(final_severity) and final_severity != '':
-                print("✅ SUCCESS: Severity score was updated from empty to:", final_severity)
-            elif not pd.isna(final_severity):
-                print("✅ Severity score is present:", final_severity)
-            else:
-                print("⚠️ WARNING: Severity score is still empty or NaN")
-
-            if current_status == 'Pending' and final_status == 'Completed':
-                print("✅ SUCCESS: Similarity check was updated from Pending to Completed")
-            else:
-                print("✅ Similarity check is:", final_status)
-
-        except Exception as e:
-            print(f"❌ Error running similarity search: {str(e)}")
-            import traceback
-            traceback.print_exc()
-
 def main():
-    print("AI Responder 360 - Customer Service Portal")
+    print("AI Responder - Customer Service Portal")
 
     portal = BugReportEntry()
-
-    service_number = portal.file_new_bug()
-
-    search_now = input("\nRun similarity search now? (y/n): ").strip().lower()
-    if search_now == 'y':
-        portal.run_similarity_search(service_number)
+    portal.file_new_bug()
 
     print("\nDone!")
 
