@@ -129,7 +129,7 @@ class BugReportEntry:
                         with contextlib.redirect_stdout(f):
                             fix_bug(bug_data['bug_description'])
                         code_doctor_output = f.getvalue()
-                        print(code_doctor_output)
+                        print("CODE DOCTOR OUTPUT:", code_doctor_output)
                         print("=" * 50)
                         print("Code Doctor analysis completed for HIGH PRIORITY bug.")
 
