@@ -63,8 +63,8 @@ def codebaseTrain():
     #     exclude=["*__pycache__*"]  # Skip test files and cache
     # )
 
-    knowledge.add_contents([{"path": "test.py"}])
+    knowledge.add_contents([{"path": "newBug.py"}])
 
-# codebaseTrain()
+codebaseTrain()
 # Uncomment to run manually
 # retrainBugReportKB()
