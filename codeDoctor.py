@@ -47,7 +47,7 @@ syntax_checker = Agent(
     ]
 )
 
-# Create the bug-fixing team
+
 bug_fix_team = Team(
     name="Bug Fix Team",
     model=Gemini(id="gemini-2.5-pro", api_key="AIzaSyDLMFmE0yQM_9an5LHX-J3AQw3mpgPb0To"),
